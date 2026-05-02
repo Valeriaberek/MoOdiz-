@@ -20,3 +20,10 @@ describe('AppController', () => {
     });
   });
 });
+
+
+// C'est un test unitaire pour le AppController.
+// Il utilise le framework de test de NestJS pour créer une instance du 
+// AppController et tester sa méthode getHello().
+// Le test vérifie que la méthode getHello() retourne bien la chaîne de 
+// caractères "Hello World!".
