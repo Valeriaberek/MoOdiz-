@@ -1,38 +1,40 @@
-import { useFonts } from 'expo-font';
 import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
-export default function HomeScreen() {
-  const [fontsLoaded] = useFonts({
-    Hagrid: require('@/assets/fonts/Hagrid.ttf'),
-  });
+import { NightScene } from '../../components/night-scene';
+import { fontFamilies } from '@/constants/typography';
+import { useDayNightTheme } from '@/hooks/use-day-night-theme';
 
-  const titleFontFamily = fontsLoaded ? 'Hagrid' : undefined;
+export default function HomeScreen() {
+  const { isNight, backgroundColor, textColor, subtitleColor, buttonColor, accentColor } = useDayNightTheme();
+  const titleFontFamily = fontFamilies.hagrid;
+  const subtitleFontFamily = fontFamilies.agletMono;
+  const bodyFontFamily = fontFamilies.robotoMedium;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor }]}> 
+      <View style={[styles.container, { backgroundColor }]}> 
+        {isNight ? <NightScene /> : null}
         <View style={styles.topSection}>
           <Image source={require('@/assets/images/logo.png')} resizeMode="contain" style={styles.logo} />
           <Image source={require('@/assets/images/wave.png')} resizeMode="stretch" style={styles.topWave} />
         </View>
 
         <View style={styles.middleSection}>
-          <Text style={[styles.title, { fontFamily: titleFontFamily }]}>PARLER, RESSENTIR, GRANDIR</Text>
-          <Text style={[styles.subtitle, { fontFamily: titleFontFamily }]}>MOODIZ aide les enfants de 3 à 5 ans à comprendre leurs émotions grâce à des activités simples à faire avec leurs parents</Text>
-
+          <Text style={[styles.title, { fontFamily: titleFontFamily, color: textColor }]}>PARLER, RESSENTIR, GRANDIR</Text>
+          <Text style={[styles.subtitle, { fontFamily: subtitleFontFamily, color: subtitleColor }]}>MOODIZ aide les enfants de 3 à 5 ans à comprendre leurs émotions grâce à des activités simples à faire avec leurs parents</Text>
         </View>
 
         <View style={styles.bottomWrapper}>
           <Image source={require('@/assets/images/vector.png')} resizeMode="stretch" style={styles.bottomVector} />
 
           <View style={styles.bottomSection}>
-            <Pressable style={styles.primaryButton}>
+            <Pressable style={[styles.primaryButton, { backgroundColor: buttonColor }]}>
               <Text style={[styles.primaryButtonText, { fontFamily: titleFontFamily }]}>Sign up</Text>
             </Pressable>
 
-            <Text style={[styles.secondaryText, { fontFamily: titleFontFamily }]}>Already have an account ?</Text>
+            <Text style={[styles.secondaryText, { fontFamily: bodyFontFamily, color: accentColor }]}>Already have an account ?</Text>
             <Pressable>
-              <Text style={[styles.linkText, { fontFamily: titleFontFamily }]}>Log in</Text>
+              <Text style={[styles.linkText, { fontFamily: titleFontFamily, color: accentColor }]}>Log in</Text>
             </Pressable>
           </View>
         </View>
@@ -44,11 +46,9 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F4F4F6',
   },
   container: {
     flex: 1,
-    backgroundColor: '#F4F4F6',
     overflow: 'hidden',
   },
   topSection: {
@@ -77,14 +77,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 44,
-    color: '#050505',
     letterSpacing: 0.5,
     fontWeight: '800',
   },
   subtitle: {
     fontSize: 21,
     lineHeight: 26,
-    color: '#C7C9D3',
     fontWeight: '600',
   },
   bottomWrapper: {
@@ -112,7 +110,6 @@ const styles = StyleSheet.create({
     maxWidth: 320,
     minHeight: 56,
     borderRadius: 28,
-    backgroundColor: '#C969D6',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,
@@ -128,7 +125,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   linkText: {
-    color: '#C969D6',
     fontSize: 24,
     fontWeight: '700',
   },
