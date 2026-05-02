@@ -7,8 +7,136 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//
+// ======================
+// USERS (PARENTS)
+// ======================
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  children      Child[]
+  sessions      Session[]
+  notifications Notification[]
+}
+
+//
+// ======================
+// CHILDREN
+// ======================
 model Child {
-  id    Int    @id @default(autoincrement())
-  name  String
-  age   Int
+  id       Int    @id @default(autoincrement())
+  name     String
+  age      Int
+
+  parentId Int
+  parent   User   @relation(fields: [parentId], references: [id])
+
+  mascots  Mascot[]
+  sessions Session[]
+}
+
+//
+// ======================
+// MASCOTS
+// ======================
+model Mascot {
+  id        Int      @id @default(autoincrement())
+  name      String
+  ageStage  Int
+  createdAt DateTime @default(now())
+
+  childId   Int
+  child     Child    @relation(fields: [childId], references: [id])
+}
+
+//
+// ======================
+// JOURNEYS
+// ======================
+model Journey {
+  id        Int    @id @default(autoincrement())
+  title     String
+  type      String
+  duration  Int
+
+  activities Activity[]
+  rituals    Ritual[]
+  sessions   Session[]
+}
+
+//
+// ======================
+// ACTIVITIES
+// ======================
+model Activity {
+  id        Int    @id @default(autoincrement())
+  title     String
+  content   String
+
+  journeyId Int
+  journey   Journey @relation(fields: [journeyId], references: [id])
+
+  sessions  Session[]
+}
+
+//
+// ======================
+// RITUALS
+// ======================
+model Ritual {
+  id          Int    @id @default(autoincrement())
+  title       String
+  instruction String
+
+  journeyId   Int
+  journey     Journey @relation(fields: [journeyId], references: [id])
+}
+
+//
+// ======================
+// GUIDES
+// ======================
+model Guide {
+  id       Int    @id @default(autoincrement())
+  title    String
+  content  String
+  category String
+}
+
+//
+// ======================
+// SESSIONS
+// ======================
+model Session {
+  id         Int      @id @default(autoincrement())
+  emotion    String
+  createdAt  DateTime @default(now())
+
+  parentId   Int
+  childId    Int
+
+  journeyId  Int?
+  activityId Int?
+
+  parent     User     @relation(fields: [parentId], references: [id])
+  child      Child    @relation(fields: [childId], references: [id])
+  journey    Journey? @relation(fields: [journeyId], references: [id])
+  activity   Activity? @relation(fields: [activityId], references: [id])
+}
+
+//
+// ======================
+// NOTIFICATIONS
+// ======================
+model Notification {
+  id        Int      @id @default(autoincrement())
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }
