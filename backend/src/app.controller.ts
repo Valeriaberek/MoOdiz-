@@ -10,3 +10,6 @@ export class AppController {
     return this.appService.getHello();
   }
 }
+
+//C'est la porte d'entrée HTTP, il recoit les requtes et appel le service pour traiter 
+// les données et retourner une réponse.
