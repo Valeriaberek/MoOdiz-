@@ -1,5 +1,6 @@
 import { Link, router } from 'expo-router';
-import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Image, ImageBackground, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { PrimaryButton, OutlineButton } from '@/components/ui'
 
 import { NightScene } from '@/components/night-scene';
 import { fontFamilies } from '@/constants/typography';
@@ -13,12 +14,11 @@ export default function LandingScreen() {
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
-      <View style={[styles.container, { backgroundColor }]}>
+      <ImageBackground source={require('@/assets/images/home.png')} style={[styles.container, { backgroundColor }]} resizeMode="cover" imageStyle={styles.homeImage}>
         {isNight ? <NightScene /> : null}
 
         <View style={styles.header}>
           <Image source={require('@/assets/images/logo.png')} resizeMode="contain" style={styles.logo} />
-          <Image source={require('@/assets/images/wave.png')} resizeMode="stretch" style={styles.topWave} />
         </View>
 
         <View style={styles.content}>
@@ -32,13 +32,19 @@ export default function LandingScreen() {
           <Image source={require('@/assets/images/vector.png')} resizeMode="stretch" style={styles.bottomVector} />
 
           <View style={styles.actions}>
-            <Pressable style={[styles.primaryButton, { backgroundColor: buttonColor }]} onPress={() => router.push('/(auth)/register')}>
-              <Text style={[styles.primaryButtonText, { fontFamily: titleFontFamily }]}>Inscription</Text>
-            </Pressable>
+            <PrimaryButton
+              onPress={() => router.push('/(auth)/register')}
+              buttonColor={buttonColor}
+              labelStyle={[styles.primaryButtonText, { fontFamily: titleFontFamily }]}
+              style={styles.primaryButton}
+            >
+              S'inscrire
+            </PrimaryButton>
 
-            <Pressable style={[styles.secondaryButton, { borderColor: accentColor }]} onPress={() => router.push('/(auth)/login')}>
-              <Text style={[styles.secondaryButtonText, { fontFamily: titleFontFamily, color: accentColor }]}>Se connecter</Text>
-            </Pressable>
+            <Text className="btn-text" style={styles.loginPrompt}>
+              <Text style={[styles.loginPromptText, { color: '#FFFFFF' }]}>Vous avez déjà un compte ? </Text>
+              <Text style={[styles.loginLink, { color: buttonColor }]} onPress={() => router.push('/(auth)/login')}>Se connecter</Text>
+            </Text>
           </View>
         </View>
 
@@ -47,7 +53,7 @@ export default function LandingScreen() {
           <Text style={[styles.footerDivider, { color: subtitleColor }]}>|</Text>
           <Link href="/privacy" style={[styles.footerLink, { color: subtitleColor, fontFamily: bodyFontFamily }]}>Confidentialité</Link>
         </View>
-      </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 }
@@ -63,7 +69,7 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    paddingTop: 18,
+    paddingTop: 50,
     justifyContent: 'flex-start',
     zIndex: 2,
   },
@@ -71,21 +77,18 @@ const styles = StyleSheet.create({
     width: 150,
     height: 120,
   },
-  topWave: {
-    alignSelf: 'stretch',
-    width: '100%',
-    height: 70,
-    marginTop: 8,
+  homeImage: {
+    alignSelf: 'center',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    marginTop: -6,
+    marginTop: -40,
     zIndex: 2,
   },
   textBlock: {
-    marginTop: 20,
-    gap: 16,
+    marginTop: 0,
+    gap: 12,
     paddingHorizontal: 24,
   },
   title: {
@@ -104,15 +107,30 @@ const styles = StyleSheet.create({
   actions: {
     zIndex: 2,
     gap: 12,
-    marginBottom: 28,
+    marginBottom: 8,
     paddingHorizontal: 28,
+  },
+  loginPrompt: {
+    textAlign: 'center',
+    marginTop: 12,
+    zIndex: 3,
+  },
+  loginPromptText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  loginLink: {
+    fontSize: 16,
+    fontWeight: '700',
   },
   primaryButton: {
     minHeight: 56,
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: -60,
   },
+
   primaryButtonText: {
     color: '#FFFFFF',
     fontSize: 22,
@@ -125,6 +143,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 2,
     backgroundColor: 'transparent',
+    marginTop: 0,
   },
   secondaryButtonText: {
     fontSize: 22,
@@ -139,7 +158,7 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   bottomWrapper: {
-    height: '36%',
+    height: '18%',
     justifyContent: 'flex-end',
   },
   footer: {

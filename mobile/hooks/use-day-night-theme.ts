@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 function getIsNightNow() {
   const hour = new Date().getHours();
 
-  return hour >= 19 || hour < 6;
+  return hour >= 19 || hour < 1;
 }
 
 export function useDayNightTheme() {

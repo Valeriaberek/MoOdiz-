@@ -1,142 +1,135 @@
-import { router } from 'expo-router';
-import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react'
+import { router } from 'expo-router'
+import { ImageBackground, SafeAreaView, StyleSheet, Text, View, Pressable } from 'react-native'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { TextField, PrimaryButton, SocialButton } from '@/components/ui'
 
-import { NightScene } from '@/components/night-scene';
-import { fontFamilies } from '@/constants/typography';
-import { useDayNightTheme } from '@/hooks/use-day-night-theme';
+import { fontFamilies } from '@/constants/typography'
 
 export default function RegisterScreen() {
-  const { isNight, backgroundColor, textColor, subtitleColor, buttonColor } = useDayNightTheme();
-  const titleFontFamily = fontFamilies.hagrid;
-  const subtitleFontFamily = fontFamilies.agletMono;
-  const bodyFontFamily = fontFamilies.robotoMedium;
+  const textColor = '#1A1A1A'
+  const subtitleColor = '#8B8B8B'
+  const buttonColor = '#C969D6'
+  const titleFontFamily = fontFamilies.hagrid
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
-      <View style={[styles.container, { backgroundColor }]}>
-        {isNight ? <NightScene /> : null}
+    <SafeAreaView style={styles.safeArea}>
+      <ImageBackground source={require('@/assets/images/background.png')} resizeMode="contain" style={styles.background}>
+        <View style={styles.container}>
 
-        <View style={styles.topSection}>
-          <Image source={require('@/assets/images/logo.png')} resizeMode="contain" style={styles.logo} />
-          <Image source={require('@/assets/images/wave.png')} resizeMode="stretch" style={styles.topWave} />
-        </View>
-
-        <View style={styles.middleSection}>
-          <View style={styles.textBlock}>
-            <Text style={[styles.title, { fontFamily: titleFontFamily, color: textColor }]}>Créer un compte</Text>
-            <Text style={[styles.subtitle, { fontFamily: subtitleFontFamily, color: subtitleColor }]}>Commencez avec Moodiz et accedez aux activites adaptees a votre enfant.</Text>
-          </View>
-
-          <View style={styles.actions}>
-            <Pressable style={[styles.primaryButton, { backgroundColor: buttonColor }]}> 
-              <Text style={[styles.primaryButtonText, { fontFamily: titleFontFamily }]}>Inscription</Text>
-            </Pressable>
-
-            <Text style={[styles.accountText, { fontFamily: bodyFontFamily }]}>Vous avez deja un compte ?</Text>
-            <Pressable onPress={() => router.push('/(auth)/login')}>
-              <Text style={[styles.loginLink, { fontFamily: titleFontFamily }]}>Se connecter</Text>
+          <View style={styles.topSection}>
+            <Pressable style={styles.backButton} onPress={() => router.back()}>
+              <MaterialCommunityIcons name="arrow-left" size={24} color={textColor} />
             </Pressable>
           </View>
-        </View>
 
-        <View style={styles.bottomWrapper}>
-          <Image source={require('@/assets/images/vector.png')} resizeMode="stretch" style={styles.bottomVector} />
+          <View style={styles.middleSection}>
+            <View style={styles.textBlock}>
+              <Text numberOfLines={1} style={[styles.title, { fontFamily: titleFontFamily, color: textColor }]}>Créer un compte</Text>
+            </View>
+
+            <View style={styles.form}>
+              <SocialButton icon="facebook" label="Continuer avec Facebook" onPress={() => {}} facebookColor={buttonColor} />
+              <SocialButton icon="google" label="Continuer avec Google" onPress={() => {}} />
+
+              <Text style={[styles.divider, { color: subtitleColor }]}>Ou se créer un compte</Text>
+
+              <TextField
+                label="Email"
+                value={email}
+                onChangeText={setEmail}
+                style={styles.input}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+              <TextField
+                label="Mot de passe"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                style={styles.input}
+              />
+
+              <PrimaryButton
+                onPress={() => { /* TODO: appeler API */ }}
+                buttonColor={buttonColor}
+                labelStyle={[styles.primaryButtonText, { fontFamily: titleFontFamily }]}
+                style={styles.paperButton}
+              >
+                C'est parti !
+              </PrimaryButton>
+            </View>
+          </View>
         </View>
-      </View>
+      </ImageBackground>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
+  background: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    overflow: 'hidden',
-    position: 'relative',
+    paddingHorizontal: 24,
   },
   topSection: {
-    paddingTop: 18,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    zIndex: 2,
+    paddingTop: 6,
+    alignItems: 'flex-start',
+    marginBottom: 4,
   },
-  logo: {
-    width: 150,
-    height: 120,
-  },
-  topWave: {
-    alignSelf: 'stretch',
-    width: '100%',
-    height: 70,
-    marginTop: 8,
+  backButton: {
+    padding: 10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 999,
   },
   middleSection: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingHorizontal: 24,
     gap: 10,
     paddingBottom: 22,
-    zIndex: 2,
+    paddingTop: 36,
   },
   textBlock: {
     width: '100%',
-    marginTop: 42,
+    marginTop: 20,
     gap: 10,
   },
   title: {
-    fontSize: 34,
+    fontSize: 24,
     fontWeight: '800',
     textAlign: 'center',
   },
-  subtitle: {
-    fontSize: 18,
-    lineHeight: 26,
-    textAlign: 'center',
-    fontWeight: '600',
-    paddingHorizontal: 10,
-  },
-  actions: {
+  form: {
     width: '100%',
-    gap: 8,
-    marginBottom: 24,
+    marginTop: 36,
+    gap: 12,
   },
-  primaryButton: {
-    minHeight: 56,
-    borderRadius: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
+  divider: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: '600',
+    marginVertical: 8,
+  },
+  input: {
+    backgroundColor: 'transparent',
+  },
+  paperButton: {
+    borderRadius: 22,
+    alignSelf: 'center',
+    width: '92%',
   },
   primaryButtonText: {
     color: '#FFFFFF',
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: '700',
-  },
-  accountText: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    textAlign: 'center',
-    marginTop: 8,
-    fontWeight: '600',
-  },
-  loginLink: {
-    color: '#C969D6',
-    fontSize: 24,
-    textAlign: 'center',
-    fontWeight: '700',
-  },
-  bottomWrapper: {
-    height: '36%',
-    justifyContent: 'flex-end',
-  },
-  bottomVector: {
-    position: 'absolute',
-    bottom: 0,
-    right: -90,
-    width: '130%',
-    height: 300,
-    zIndex: 0,
   },
 });
