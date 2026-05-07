@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+import { Alert, ImageBackground, SafeAreaView, StyleSheet, Text, View, Pressable } from 'react-native'
 import { router } from 'expo-router'
-import { ImageBackground, SafeAreaView, StyleSheet, Text, View, Pressable } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { TextField, PrimaryButton, SocialButton } from '@/components/ui'
 
 import { fontFamilies } from '@/constants/typography'
+import { registerUser } from '@/services/auth'
 
 export default function RegisterScreen() {
   const textColor = '#1A1A1A'
@@ -14,6 +15,24 @@ export default function RegisterScreen() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleRegister = async () => {
+    if (!email || !password) {
+      Alert.alert('Erreur', 'Remplis ton email et ton mot de passe.')
+      return
+    }
+
+    try {
+      setLoading(true)
+      await registerUser(email.trim(), password)
+      router.replace('/redirect')
+    } catch (error) {
+      Alert.alert('Inscription impossible', error instanceof Error ? error.message : 'Réessaie plus tard.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -54,12 +73,13 @@ export default function RegisterScreen() {
               />
 
               <PrimaryButton
-                onPress={() => { /* TODO: appeler API */ }}
+                onPress={handleRegister}
                 buttonColor={buttonColor}
                 labelStyle={[styles.primaryButtonText, { fontFamily: titleFontFamily }]}
                 style={styles.paperButton}
+                disabled={loading}
               >
-                C'est parti !
+                {loading ? 'Création...' : "C'est parti !"}
               </PrimaryButton>
             </View>
           </View>
