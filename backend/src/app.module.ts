@@ -11,12 +11,13 @@ import { RitualModule } from './ritual/ritual.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { NotificationModule } from './notification/notification.module';
 import { GuideModule } from './guide/guide.module';
+import { AuthModule } from './auth/auth.module'
 
 
 
 @Module({
   imports: [ChildModule, UserModule, SessionModule, MascotModule, JourneyModule,
-     ActivityModule, RitualModule, PrismaModule, NotificationModule, GuideModule],
+     ActivityModule, RitualModule, PrismaModule, NotificationModule, GuideModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

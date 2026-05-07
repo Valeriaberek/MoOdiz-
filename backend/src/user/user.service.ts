@@ -1,29 +1,25 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  create(email: string, password: string) {
-    return this.prisma.user.create({
-      data: { email, password }
-    })
+  async create(email: string, password: string) {
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10)
+      return await this.prisma.user.create({
+        data: { email, password: hashedPassword }
+      })
+    } catch (error) {
+      return { error: 'User already exists' }
+    }
   }
 
-  findAll() {
-    return this.prisma.user.findMany()
-  }
-
-  findOne(id: number) {
-    return this.prisma.user.findUnique({
-      where: { id }
-    })
-  }
-
-  delete(id: number) {
-    return this.prisma.user.delete({
-      where: { id }
+  async findByEmail(email: string) {
+    return await this.prisma.user.findUnique({
+      where: { email }
     })
   }
 }
