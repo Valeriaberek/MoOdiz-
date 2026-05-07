@@ -16,7 +16,6 @@ export default function HomeScreen() {
         {isNight ? <NightScene /> : null}
         <View style={styles.topSection}>
           <Image source={require('@/assets/images/logo.png')} resizeMode="contain" style={styles.logo} />
-          <Image source={require('@/assets/images/wave.png')} resizeMode="stretch" style={styles.topWave} />
         </View>
 
         <View style={styles.middleSection}>
