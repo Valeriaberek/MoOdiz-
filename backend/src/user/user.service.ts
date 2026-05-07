@@ -10,7 +10,12 @@ export class UserService {
     try {
       const hashedPassword = await bcrypt.hash(password, 10)
       return await this.prisma.user.create({
-        data: { email, password: hashedPassword }
+        data: { email, password: hashedPassword },
+        select: {
+          id: true,
+          email: true,
+          createdAt: true
+        }
       })
     } catch (error) {
       return { error: 'User already exists' }

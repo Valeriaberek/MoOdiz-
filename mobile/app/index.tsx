@@ -1,6 +1,6 @@
 import { Link, router } from 'expo-router';
 import { Image, ImageBackground, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { PrimaryButton, OutlineButton } from '@/components/ui'
+import { PrimaryButton } from '@/components/ui'
 
 import { NightScene } from '@/components/night-scene';
 import { fontFamilies } from '@/constants/typography';

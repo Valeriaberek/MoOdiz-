@@ -8,13 +8,15 @@ type Props = {
   style?: StyleProp<ViewStyle>
   labelStyle?: StyleProp<TextStyle>
   buttonColor?: string
+  disabled?: boolean
 }
 
-export default function PrimaryButton({ children, onPress, style, labelStyle, buttonColor }: Props) {
+export default function PrimaryButton({ children, onPress, style, labelStyle, buttonColor, disabled }: Props) {
   return (
     <Button
       mode="contained"
       onPress={onPress}
+      disabled={disabled}
       contentStyle={{ height: 50 }}
       buttonColor={buttonColor}
       labelStyle={labelStyle}

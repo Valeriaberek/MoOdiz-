@@ -1,6 +1,16 @@
+import { useEffect } from 'react'
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { router } from 'expo-router'
 
-export default function HomeScreen() {
+export default function RedirectScreen() {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.replace('/(tabs)')
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>

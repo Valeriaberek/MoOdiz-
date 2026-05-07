@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+import { Alert, ImageBackground, SafeAreaView, StyleSheet, Text, View, Pressable } from 'react-native'
 import { router } from 'expo-router'
-import { ImageBackground, SafeAreaView, StyleSheet, Text, View, Pressable } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { TextField, PrimaryButton, SocialButton } from '@/components/ui'
 
 import { fontFamilies } from '@/constants/typography'
+import { loginUser } from '@/services/auth'
 
 export default function LoginScreen() {
   const textColor = '#1A1A1A'
@@ -14,6 +15,24 @@ export default function LoginScreen() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Erreur', 'Remplis ton email et ton mot de passe.')
+      return
+    }
+
+    try {
+      setLoading(true)
+      await loginUser(email.trim(), password)
+      router.replace('/redirect')
+    } catch (error) {
+      Alert.alert('Connexion impossible', error instanceof Error ? error.message : 'Réessaie plus tard.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -52,12 +71,13 @@ export default function LoginScreen() {
               />
 
               <PrimaryButton
-                onPress={() => { /* TODO: appeler API */ }}
+                onPress={handleLogin}
                 buttonColor={buttonColor}
                 labelStyle={[styles.primaryButtonText, { fontFamily: titleFontFamily }]}
                 style={styles.paperButton}
+                disabled={loading}
               >
-                Se connecter
+                {loading ? 'Connexion...' : 'Se connecter'}
               </PrimaryButton>
 
               <Text style={[styles.forgotPassword, { color: textColor }]}>Mot de passe oublié</Text>
