@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, ImageBackground, SafeAreaView, StyleSheet, Text, View, Pressable } from 'react-native'
+import { Alert, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, View, Pressable } from 'react-native'
 import { router } from 'expo-router'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { TextField, PrimaryButton, SocialButton } from '@/components/ui'
@@ -46,42 +46,48 @@ export default function RegisterScreen() {
           </View>
 
           <View style={styles.middleSection}>
-            <View style={styles.textBlock}>
-              <Text numberOfLines={1} style={[styles.title, { fontFamily: titleFontFamily, color: textColor }]}>Créer un compte</Text>
-            </View>
+            <ScrollView
+              contentContainerStyle={styles.middleScrollContent}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              <View style={styles.textBlock}>
+                <Text numberOfLines={1} style={[styles.title, { fontFamily: titleFontFamily, color: textColor }]}>Créer un compte</Text>
+              </View>
 
-            <View style={styles.form}>
-              <SocialButton icon="facebook" label="Continuer avec Facebook" onPress={() => {}} facebookColor={buttonColor} />
-              <SocialButton icon="google" label="Continuer avec Google" onPress={() => {}} />
+              <View style={styles.form}>
+                <SocialButton icon="facebook" label="Continuer avec Facebook" onPress={() => {}} facebookColor={buttonColor} />
+                <SocialButton icon="google" label="Continuer avec Google" onPress={() => {}} />
 
-              <Text style={[styles.divider, { color: subtitleColor }]}>Ou se créer un compte</Text>
+                <Text style={[styles.divider, { color: subtitleColor }]}>Ou se créer un compte</Text>
 
-              <TextField
-                label="Email"
-                value={email}
-                onChangeText={setEmail}
-                style={styles.input}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-              <TextField
-                label="Mot de passe"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                style={styles.input}
-              />
+                <TextField
+                  label="Email"
+                  value={email}
+                  onChangeText={setEmail}
+                  style={styles.input}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+                <TextField
+                  label="Mot de passe"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry
+                  style={styles.input}
+                />
 
-              <PrimaryButton
-                onPress={handleRegister}
-                buttonColor={buttonColor}
-                labelStyle={[styles.primaryButtonText, { fontFamily: titleFontFamily }]}
-                style={styles.paperButton}
-                disabled={loading}
-              >
-                {loading ? 'Création...' : "C'est parti !"}
-              </PrimaryButton>
-            </View>
+                <PrimaryButton
+                  onPress={handleRegister}
+                  buttonColor={buttonColor}
+                  labelStyle={[styles.primaryButtonText, { fontFamily: titleFontFamily }]}
+                  style={styles.paperButton}
+                  disabled={loading}
+                >
+                  {loading ? 'Création...' : "C'est parti !"}
+                </PrimaryButton>
+              </View>
+            </ScrollView>
           </View>
         </View>
       </ImageBackground>
@@ -112,15 +118,18 @@ const styles = StyleSheet.create({
   },
   middleSection: {
     flex: 1,
+  },
+  middleScrollContent: {
+    flexGrow: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     gap: 10,
     paddingBottom: 22,
-    paddingTop: 36,
+    paddingTop: 20,
   },
   textBlock: {
     width: '100%',
-    marginTop: 20,
+    marginTop: 10,
     gap: 10,
   },
   title: {

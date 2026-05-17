@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { router } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { StyleSheet, View } from 'react-native'
+import Rive from 'rive-react-native'
 
 export default function RedirectScreen() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.replace('/(tabs)')
-    }, 500)
+    }, 3500) // un peu plus stable pour laisser charger l'anim
 
     return () => clearTimeout(timer)
   }, [])
@@ -14,7 +16,11 @@ export default function RedirectScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.text}>Hello</Text>
+        <Rive
+          resourceName="octopus"
+          autoplay
+          style={styles.rive}
+        />
       </View>
     </SafeAreaView>
   )
@@ -23,16 +29,15 @@ export default function RedirectScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
   },
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
-  text: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#1A1A1A'
-  }
+  rive: {
+    width: 300,
+    height: 300,
+  },
 })
