@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, ImageBackground, SafeAreaView, StyleSheet, Text, View, Pressable } from 'react-native'
+import { Alert, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, View, Pressable } from 'react-native'
 import { router } from 'expo-router'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { TextField, PrimaryButton, SocialButton } from '@/components/ui'
@@ -24,8 +24,10 @@ export default function LoginScreen() {
     }
 
     try {
+      console.log('handleLogin start', { email })
       setLoading(true)
-      await loginUser(email.trim(), password)
+      const res = await loginUser(email.trim(), password)
+      console.log('loginUser response', res)
       router.replace('/redirect')
     } catch (error) {
       Alert.alert('Connexion impossible', error instanceof Error ? error.message : 'Réessaie plus tard.')
@@ -46,42 +48,48 @@ export default function LoginScreen() {
           </View>
 
           <View style={styles.middleSection}>
-            <Text numberOfLines={1} style={[styles.title, { fontFamily: titleFontFamily, color: textColor }]}>Heureux de vous revoir !</Text>
+            <ScrollView
+              contentContainerStyle={styles.middleScrollContent}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              <Text numberOfLines={1} style={[styles.title, { fontFamily: titleFontFamily, color: textColor }]}>Heureux de vous revoir !</Text>
 
-            <View style={styles.form}>
-              <SocialButton icon="facebook" label="Continuer avec Facebook" onPress={() => {}} facebookColor={buttonColor} />
-              <SocialButton icon="google" label="Continuer avec Google" onPress={() => {}} />
+              <View style={styles.form}>
+                <SocialButton icon="facebook" label="Continuer avec Facebook" onPress={() => {}} facebookColor={buttonColor} />
+                <SocialButton icon="google" label="Continuer avec Google" onPress={() => {}} />
 
-              <Text style={[styles.divider, { color: subtitleColor }]}>Ou se connecter avec vos identifiants</Text>
+                <Text style={[styles.divider, { color: subtitleColor }]}>Ou se connecter avec vos identifiants</Text>
 
-              <TextField
-                label="Email"
-                value={email}
-                onChangeText={setEmail}
-                style={styles.input}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-              <TextField
-                label="Mot de passe"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                style={styles.input}
-              />
+                <TextField
+                  label="Email"
+                  value={email}
+                  onChangeText={setEmail}
+                  style={styles.input}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+                <TextField
+                  label="Mot de passe"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry
+                  style={styles.input}
+                />
 
-              <PrimaryButton
-                onPress={handleLogin}
-                buttonColor={buttonColor}
-                labelStyle={[styles.primaryButtonText, { fontFamily: titleFontFamily }]}
-                style={styles.paperButton}
-                disabled={loading}
-              >
-                {loading ? 'Connexion...' : 'Se connecter'}
-              </PrimaryButton>
+                <PrimaryButton
+                  onPress={handleLogin}
+                  buttonColor={buttonColor}
+                  labelStyle={[styles.primaryButtonText, { fontFamily: titleFontFamily }]}
+                  style={styles.paperButton}
+                  disabled={loading}
+                >
+                  {loading ? 'Connexion...' : 'Se connecter'}
+                </PrimaryButton>
 
-              <Text style={[styles.forgotPassword, { color: textColor }]}>Mot de passe oublié</Text>
-            </View>
+                <Text style={[styles.forgotPassword, { color: textColor }]}>Mot de passe oublié</Text>
+              </View>
+            </ScrollView>
           </View>
         </View>
       </ImageBackground>
@@ -112,10 +120,14 @@ const styles = StyleSheet.create({
   },
   middleSection: {
     flex: 1,
+  },
+  middleScrollContent: {
+    flexGrow: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     gap: 10,
-    paddingTop: 36,
+    paddingTop: 20,
+    paddingBottom: 24,
   },
   title: {
     fontSize: 28,

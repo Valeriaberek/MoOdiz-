@@ -18,7 +18,7 @@ function getApiUrl() {
   }
 
   return Platform.select({
-    android: 'http://10.0.2.2:3000',
+    android: 'http://localhost:3000',
     ios: 'http://localhost:3000',
     web: 'http://localhost:3000',
     default: 'http://localhost:3000'
@@ -34,6 +34,7 @@ type AuthResponse = {
 
 async function requestAuth(path: string, email: string, password: string) {
   try {
+    console.log('requestAuth', { API_URL, path, email })
     const response = await fetch(`${API_URL}${path}`, {
       method: 'POST',
       headers: {
@@ -46,6 +47,7 @@ async function requestAuth(path: string, email: string, password: string) {
 
     if (!response.ok) {
       const errorMsg = data?.error || data?.message || `Erreur ${response.status}`
+      console.error('requestAuth non-ok', { status: response.status, data })
       throw new Error(errorMsg)
     }
 
@@ -55,6 +57,7 @@ async function requestAuth(path: string, email: string, password: string) {
 
     return data
   } catch (error) {
+    console.error('requestAuth error', error)
     if (error instanceof Error) {
       throw error
     }

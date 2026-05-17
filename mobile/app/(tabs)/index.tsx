@@ -1,10 +1,15 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
+import Rive from 'rive-react-native'
 
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.text}>Hello</Text>
+        <Rive
+          resourceName="octopus"
+          autoplay
+          style={styles.rive}
+        />
       </View>
     </SafeAreaView>
   )
@@ -13,16 +18,15 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
   },
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
-  text: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#1A1A1A'
-  }
+  rive: {
+    width: 300,
+    height: 300,
+  },
 })
